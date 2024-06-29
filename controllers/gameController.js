@@ -21,7 +21,38 @@ const getGamesByTeam = async (req, res) => {
   }
 };
 
-module.exports = {
-  getAllGames,
-  getGamesByTeam,
+// Get unique teams with their game counts
+const getUniqueTeams = async (req, res) => {
+  try {
+    const games = await Game.find();
+    const teams = {};
+
+    games.forEach(game => {
+      teams[game.homeTeam] = (teams[game.homeTeam] || 0) + 1;
+      teams[game.awayTeam] = (teams[game.awayTeam] || 0) + 1;
+    });
+
+    res.json(teams);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
 };
+
+// Get unique venues with their game counts
+const getUniqueVenues = async (req, res) => {
+  try {
+    const games = await Game.find();
+    const venues = {};
+
+    games.forEach(game => {
+      const venueName = `${game.venue.name}, ${game.venue.city}`;
+      venues[venueName] = (venues[venueName] || 0) + 1;
+    });
+
+    res.json(venues);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+};
+
+module.exports = { getAllGames, getGamesByTeam, getUniqueTeams, getUniqueVenues };
