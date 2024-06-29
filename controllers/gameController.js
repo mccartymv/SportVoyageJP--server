@@ -55,13 +55,14 @@ const getUniqueVenues = async (req, res) => {
   }
 };
 
+// Get games by venue
 const getGamesByVenue = async (req, res) => {
   const { venueName } = req.params;
   try {
+    const [venue, city] = venueName.split(', ');
     const games = await Game.find({
-      $or: [
-        { 'venue.name': venueName.split(', ')[0], 'venue.city': venueName.split(', ')[1] }
-      ]
+      'venue.name': venue,
+      'venue.city': city
     });
     res.json(games);
   } catch (error) {
@@ -70,3 +71,4 @@ const getGamesByVenue = async (req, res) => {
 };
 
 module.exports = { getAllGames, getGamesByTeam, getUniqueTeams, getUniqueVenues, getGamesByVenue };
+
