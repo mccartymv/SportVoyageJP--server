@@ -55,4 +55,18 @@ const getUniqueVenues = async (req, res) => {
   }
 };
 
-module.exports = { getAllGames, getGamesByTeam, getUniqueTeams, getUniqueVenues };
+const getGamesByVenue = async (req, res) => {
+  const { venueName } = req.params;
+  try {
+    const games = await Game.find({
+      $or: [
+        { 'venue.name': venueName.split(', ')[0], 'venue.city': venueName.split(', ')[1] }
+      ]
+    });
+    res.json(games);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+};
+
+module.exports = { getAllGames, getGamesByTeam, getUniqueTeams, getUniqueVenues, getGamesByVenue };
