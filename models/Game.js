@@ -9,7 +9,8 @@ const gameSchema = new mongoose.Schema({
     name: { type: String, required: true },
     city: { type: String, required: true },
     coordinates: { type: String, required: true }
-  }
+  },
+  isCountrysideGame: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('Game', gameSchema);
